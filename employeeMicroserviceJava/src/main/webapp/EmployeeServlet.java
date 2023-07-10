@@ -16,8 +16,7 @@ import java.io.IOException;
 
 public class EmployeeServlet extends HttpServlet {
     private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/";
-    private static final String CREATE_TABLE_PATH = "/home/tali/Desktop/employeeMicroservice/employeeMicroservice" +
-            "/src/main/webapp/createEmployeeTable.sql";
+    private static final String CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/createEmployeeTable.sql";
     private static final String username = "tali";
     private static final String password = "dtfd123";
     private static final String databaseName = "employees_microservice";

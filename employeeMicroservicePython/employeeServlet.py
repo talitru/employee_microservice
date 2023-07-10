@@ -9,7 +9,7 @@ MYSQL_URL = "localhost"
 username = "tali"
 password = "dtfd123"
 databaseName = "employees_microservice"
-CREATE_TABLE_PATH = "/home/tali/Desktop/employeeMicroservice/employeeMicroservice/src/main/webapp/createEmployeeTable.sql"
+CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/createEmployeeTable.sql"
 
 def create_tables(connection):
     with open(CREATE_TABLE_PATH, 'r') as file:
@@ -68,22 +68,42 @@ def add_employee():
     except Error as e:
         return jsonify({'error': 'Internal server error'})
 
+
 @app.route('/employees/<employee_id>', methods=['PUT'])
 def update_employee(employee_id):
     try:
         employee = request.get_json()
-        if 'employee_id' in employee:
-            del employee['employee_id']
         if not employee:
             return jsonify({'error': 'No data to update'})
         cursor = databaseConnection.cursor()
+        
+        # Check if employee_id exists in the table
+        cursor.execute("SELECT employee_id FROM Employees WHERE employee_id = %s", (employee_id,))
+        if cursor.fetchone() is None:
+            return jsonify({'error': 'Employee not found'})
+        
+        updated = False  # Track whether any updates were made
+        
         for key, value in employee.items():
+            # Check if the key exists as a column in the table
+            cursor.execute("SHOW COLUMNS FROM Employees LIKE %s", (key,))
+            if cursor.fetchone() is None:
+                return jsonify({'error': 'Invalid key: {key}'})
+            
             cursor.execute("UPDATE Employees SET {} = %s WHERE employee_id = %s".format(key), (value, employee_id))
+            if cursor.rowcount > 0:  # If at least one row was affected, set updated to True
+                updated = True
+        
         databaseConnection.commit()
         cursor.close()
+        
+        if not updated:  # If no updates were made, return an appropriate message
+            return jsonify({'message': 'No changes made'})
+        
         return jsonify({'message': 'Employee updated successfully'})
     except Error:
-        return jsonify({'error': 'One of the keys are wrong'})
+        return jsonify({'error': 'An error occurred while updating the employee'})
+
 
 @app.route('/employees', methods=['DELETE'])
 def delete_employees():
