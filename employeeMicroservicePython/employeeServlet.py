@@ -6,8 +6,8 @@ from mysql.connector import Error
 app = Flask(__name__)
 
 MYSQL_URL = "localhost"
-username = "tali"
-password = "dtfd123"
+userName = "tali"
+passWord = "dtfd123"
 databaseName = "employees_microservice"
 CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/createEmployeeTable.sql"
 
@@ -20,12 +20,12 @@ def create_tables(connection):
 
 def create_database():
     try:
-        connection = mysql.connector.connect(host=MYSQL_URL, user=username, password=password)
+        connection = mysql.connector.connect(host=MYSQL_URL, user=userName, password=passWord)
         cursor = connection.cursor()
         cursor.execute("CREATE DATABASE IF NOT EXISTS " + databaseName)
         cursor.close()
         connection.close()
-        connection = mysql.connector.connect(host=MYSQL_URL, user=username, password=password, database=databaseName)
+        connection = mysql.connector.connect(host=MYSQL_URL, user=userName, password=passWord, database=databaseName)
         create_tables(connection)
         return connection
     except Error as e:
@@ -133,4 +133,4 @@ def is_json_valid(employee):
     return True
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
