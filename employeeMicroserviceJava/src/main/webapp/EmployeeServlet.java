@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class EmployeeServlet extends HttpServlet {
     private static final String MYSQL_URL = "jdbc:mysql://localhost:3306/";
-    private static final String CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/employeeMicroserviceJava/createEmployeeTable.sql";
+    private static final String CREATE_TABLE_FILE = "createEmployeeTable.sql";
     private static final String username = "tali";
     private static final String password = "dtfd123";
     private static final String databaseName = "employees_microservice";
@@ -138,7 +138,7 @@ public class EmployeeServlet extends HttpServlet {
     private void createTables() {
         ScriptRunner runner = new ScriptRunner(databaseConnection);
         try {
-            runner.runScript(new FileReader(CREATE_TABLE_PATH));
+            runner.runScript(new FileReader(CREATE_TABLE_FILE));
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
