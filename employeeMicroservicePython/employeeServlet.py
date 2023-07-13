@@ -9,10 +9,10 @@ MYSQL_URL = "localhost"
 userName = "tali"
 passWord = "dtfd123"
 databaseName = "employees_microservice"
-CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/createEmployeeTable.sql"
+CREATE_TABLE_PATH = "/home/tali/Desktop/employee_microservice/employeeMicroservicePython/createEmployeeTable.sql"
 
 def create_tables(connection):
-    with open(CREATE_TABLE_PATH, 'r') as file:
+    with open("createEmployeeTable.sql", 'r') as file:
         script = file.read()
         cursor = connection.cursor()
         cursor.execute(script)
